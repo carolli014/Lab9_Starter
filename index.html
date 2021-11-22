@@ -87,7 +87,20 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "08d50af345cb46b9bc8bbe6f93e35881"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>          
+  <script>
+    class ValidationError extends Error {
+      constructor(message) {
+        super(message); 
+        this.name = "ValidationError";
+      }
+    }
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,13 +108,99 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      if (isNaN(firstNum)) {
+        throw new ValidationError("invalid input");
+      }
+      try {
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      }
+      catch (e) {
+        throw e;
+      }
+      finally {
+        alert( 'finally' );
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    var button = document.getElementsByTagName('button');
+    button[1].addEventListener("click", function() {
+      console.log("console log demo");
+    });
+    button[2].addEventListener("click", function() {
+      console.error("console error demo");
+    });
+    button[3].addEventListener("click", function() {
+      console.count('count button');
+    });
+    button[4].addEventListener("click", function() {
+      console.warn("console warn demo");
+    });
+    button[5].addEventListener("click", function() {
+      const x = 3;
+      const y = 5;
+      const reason = 'x is expected to be greater than y';
+      console.assert(x > y, {x, y, reason});
+    });
+    button[6].addEventListener("click", function() {
+      console.clear();
+    });
+    button[7].addEventListener("click", function() {
+      console.dir(document.head);
+    });
+    button[8].addEventListener("click", function() {
+      console.dirxml(document);
+    });
+    button[9].addEventListener("click", function() {
+      const label = 'console group demo';
+      console.group(label);
+    });
+    button[10].addEventListener("click", function() {
+      const label = 'console group demo';
+      console.groupEnd(label);
+    });
+    button[11].addEventListener("click", function() {
+      console.table([
+        {
+          Department: 'CSE',
+          Number: '110',
+          Instructor: 'Powell'
+        },
+        {
+          Department: 'CSE',
+          Number: '167'
+        },
+        {
+          Department: 'MATH',
+          Number: '170A'
+        }
+      ]);
+    });
+    button[12].addEventListener("click", function() {
+      console.time();
+    });
+    button[13].addEventListener("click", function() {
+      console.timeEnd();
+    });
+    button[14].addEventListener("click", function() {
+      const first = () => { second(); };
+      const second = () => { third(); };
+      const third = () => { console.trace(); };
+      first();
+    });
+    button[15].addEventListener("click", function() {
+      const num = 3;
+      num = 4;
+    });
+    
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+      console.log('there is an error');
+      return true;
+    }
   </script>
 </body>
 
